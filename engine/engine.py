@@ -6,17 +6,18 @@ from .engine_types import Point
 class Engine:
     """ The main engine class with functionality to draw things on screen"""
 
-    def __init__(self):
+    def __init__(self, filler="#"):
         self._screen = curses.initscr()
         self.max_y, self.max_x = self._screen.getmaxyx()
+        self._filler = filler
         self._screen_buffer = [
-            ["#" for i in range(self.max_x)] for j in range(self.max_y)
+            [self._filler for i in range(self.max_x)] for j in range(self.max_y)
         ]
 
     def _reset_buffer(self):
         """ sets the screen buffer to initial value"""
         self._screen_buffer = [
-            ["#" for i in range(self.max_x)] for j in range(self.max_y)
+            [self._filler for i in range(self.max_x)] for j in range(self.max_y)
         ]
 
     def set_pixel(self, pos: Point, val: str = "."):
@@ -91,3 +92,27 @@ class Engine:
                 self._draw_line_high(end_pnt.x, end_pnt.y, start_pnt.x, start_pnt.y)
             else:
                 self._draw_line_high(start_pnt.x, start_pnt.y, end_pnt.x, end_pnt.y)
+
+    def draw_rect(self, top_l: Point, bot_r: Point):
+        """ draws an axis aligned rectangle given the top left and bottom right points"""
+        top_r = Point(top_l.x, bot_r.y)
+        bot_l = Point(bot_r.x, top_l.y)
+        self.draw_line(top_l, top_r)
+        self.draw_line(top_r, bot_r)
+        self.draw_line(top_l, bot_l)
+        self.draw_line(bot_l, bot_r)
+
+    def draw_triangle(self, p1: Point, p2: Point, p3: Point):
+        """ draws a triangle given 3 points """
+        self.draw_line(p1, p2)
+        self.draw_line(p1, p3)
+        self.draw_line(p2, p3)
+
+    def run(self):
+        """
+            Get user input
+            Update the game state
+            Draw the game
+            should be overridden
+        """
+        raise NotImplementedError
