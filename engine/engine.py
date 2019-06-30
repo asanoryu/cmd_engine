@@ -44,7 +44,7 @@ class Engine:
                 except IndexError:
                     pass
 
-    def _draw_line_low(self, x0: int, y0: int, x1: int, y1: int):
+    def _draw_line_low(self, x0: int, y0: int, x1: int, y1: int, symbol:str):
         """ helper for drawing a line with low slope """
         dx = x1 - x0
         dy = y1 - y0
@@ -56,13 +56,13 @@ class Engine:
         y = y0
 
         for x in range(x0, x1):
-            self.set_pixel(Point(x, y))
+            self.set_pixel(Point(x, y), symbol)
             if D > 0:
                 y = y + yi
                 D = D - 2 * dx
             D = D + 2 * dy
 
-    def _draw_line_high(self, x0: int, y0: int, x1: int, y1: int):
+    def _draw_line_high(self, x0: int, y0: int, x1: int, y1: int, symbol:str):
         """ helper for drawing a line with a high slope """
         dx = x1 - x0
         dy = y1 - y0
@@ -74,24 +74,24 @@ class Engine:
         x = x0
 
         for y in range(y0, y1):
-            self.set_pixel(Point(x, y))
+            self.set_pixel(Point(x, y), symbol)
             if D > 0:
                 x = x + xi
                 D = D - 2 * dy
             D = D + 2 * dx
 
-    def draw_line(self, start_pnt: Point, end_pnt: Point):
+    def draw_line(self, start_pnt: Point, end_pnt: Point, symbol:str ='#'):
         """ draws a line with # from starting point to end_point """
         if abs(end_pnt.y - start_pnt.y) < abs(end_pnt.x - start_pnt.x):
             if start_pnt.x > end_pnt.x:
-                self._draw_line_low(end_pnt.x, end_pnt.y, start_pnt.x, start_pnt.y)
+                self._draw_line_low(end_pnt.x, end_pnt.y, start_pnt.x, start_pnt.y, symbol)
             else:
-                self._draw_line_low(start_pnt.x, start_pnt.y, end_pnt.x, end_pnt.y)
+                self._draw_line_low(start_pnt.x, start_pnt.y, end_pnt.x, end_pnt.y, symbol)
         else:
             if start_pnt.y > end_pnt.y:
-                self._draw_line_high(end_pnt.x, end_pnt.y, start_pnt.x, start_pnt.y)
+                self._draw_line_high(end_pnt.x, end_pnt.y, start_pnt.x, start_pnt.y, symbol)
             else:
-                self._draw_line_high(start_pnt.x, start_pnt.y, end_pnt.x, end_pnt.y)
+                self._draw_line_high(start_pnt.x, start_pnt.y, end_pnt.x, end_pnt.y, symbol)
 
     def draw_rect(self, top_l: Point, bot_r: Point):
         """ draws an axis aligned rectangle given the top left and bottom right points"""

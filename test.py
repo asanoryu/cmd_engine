@@ -1,25 +1,20 @@
 import time
 
-from engine import Engine, Point
+from engine.engine import Engine
+from engine.engine_types import Point, TIMEOUT_60FPS
 
+class TestEngine(Engine):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.start = Point(3, 10)
+        self.end = Point(10, 30)
 
-buffer = [
-    [".", ".", ".", ".", ".", "."],
-    [".", ".", ".", "#", "#", "#"],
-    [".", ".", "#", "#", "#", "#"],
-    [".", "#", "#", "#", "#", "#"],
-    [".", "#", "#", "#", "#", "#"],
-    [".", "#", "#", "#", "#", "#"],
-]
+    def run(self):
+        while True:
+            self.draw_line(self.start, self.end)
+            self.draw_frame()
+            time.sleep(TIMEOUT_60FPS)
+            
 
-
-eng = Engine()
-# eng.set_screen()
-print(f"{eng.max_x} {eng.max_y}")
-st = Point(0, 0)
-end = Point(30, 30)
-eng.draw_line(st, end)
-
-eng.draw_line(Point(0, 30), Point(35, 0))
-eng.draw_frame()
-time.sleep(4)
+eng = TestEngine(filler=' ')
+eng.run()

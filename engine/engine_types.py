@@ -7,3 +7,6 @@ class Point:
 
     x: int = 0
     y: int = 0
+
+
+TIMEOUT_60FPS : float = 0.016
